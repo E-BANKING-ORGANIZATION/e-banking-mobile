@@ -12,7 +12,7 @@
         tools:context=".ui.activities.MainActivity">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewStarredModules"
+            android:id="@+id/recyclerViewTransactions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="52dp"
@@ -22,7 +22,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
+        <Button
+            android:id="@+id/goBackToProfileButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="48dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/main_green"
+            android:padding="8dp"
+            android:text="Go Back To Profile"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewTransactions" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/home_navigation">
+    android:id="@+id/home_navigation"
+    app:startDestination="@id/homeFragment">
 
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_selectBeneficiaire"
+            app:destination="@id/selectBeneficiaire" />
+        <action
+            android:id="@+id/action_homeFragment_to_historyTransactionsFragment"
+            app:destination="@id/historyTransactionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectBeneficiaire"
+        android:name="android.example.ebankingmobile.ui.fragments.SelectBeneficiaire"
+        android:label="SelectBeneficiaire" >
+        <action
+            android:id="@+id/action_selectBeneficiaire_to_selectMontantFragment"
+            app:destination="@id/selectMontantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectMontantFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.SelectMontantFragment"
+        android:label="SelectMontantFragment" >
+        <action
+            android:id="@+id/action_selectMontantFragment_to_enterOtpFragment"
+            app:destination="@id/enterOtpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/enterOtpFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.EnterOtpFragment"
+        android:label="EnterOtpFragment" >
+        <action
+            android:id="@+id/action_enterOtpFragment_to_finaliserTransactionFragment"
+            app:destination="@id/finaliserTransactionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/finaliserTransactionFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.FinaliserTransactionFragment"
+        android:label="FinaliserTransactionFragment" >
+        <action
+            android:id="@+id/action_finaliserTransactionFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyTransactionsFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.HistoryTransactionsFragment"
+        android:label="HistoryTransactionsFragment" />
 </navigation>
