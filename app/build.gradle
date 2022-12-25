@@ -56,8 +56,6 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation("androidx.recyclerview:recyclerview:1.2.1")
 
-    // pdf reader
-    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     // Kotlin components!
 //    implementation "org.jetbrains.kotlin:kotlin:stdlib-jdk7:1.3.72"
 
