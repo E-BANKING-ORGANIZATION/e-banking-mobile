@@ -27,7 +27,7 @@ class HistoryTransactionsFragment : Fragment() {
 
     private fun goBackToHome() {
         binding.goBackToProfileButton.setOnClickListener {
-            findNavController().navigate(R.id.action_finaliserTransactionFragment_to_homeFragment)
+            findNavController().navigateUp()
         }
     }
 
