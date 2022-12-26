@@ -1,34 +1,35 @@
-package android.example.ebankingmobile.ui.fragments
+package android.example.ebankingmobile.ui.fragments.finaliserTransaction
 
 import android.example.ebankingmobile.R
-import android.example.ebankingmobile.databinding.FragmentEnterOtpBinding
+import android.example.ebankingmobile.databinding.FragmentFinaliserTransactionBinding
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 
 
-class EnterOtpFragment : Fragment() {
-    private lateinit var binding : FragmentEnterOtpBinding
+class FinaliserTransactionFragment : Fragment() {
+
+    private lateinit var binding : FragmentFinaliserTransactionBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_enter_otp,container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_finaliser_transaction,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        goToFinalisation()
+        goBackToProfile()
     }
 
-    private fun goToFinalisation() {
+    private fun goBackToProfile() {
         binding.btnDone.setOnClickListener {
-            findNavController().navigate(R.id.action_enterOtpFragment_to_finaliserTransactionFragment)
+            findNavController().navigate(R.id.action_finaliserTransactionFragment_to_homeFragment)
         }
     }
 

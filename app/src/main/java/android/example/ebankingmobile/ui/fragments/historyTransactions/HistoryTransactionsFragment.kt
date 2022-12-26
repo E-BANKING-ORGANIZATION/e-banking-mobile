@@ -1,7 +1,7 @@
-package android.example.ebankingmobile.ui.fragments
+package android.example.ebankingmobile.ui.fragments.historyTransactions
 
 import android.example.ebankingmobile.R
-import android.example.ebankingmobile.databinding.FragmentSelectMontantBinding
+import android.example.ebankingmobile.databinding.FragmentHistoryTransactionsBinding
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,26 +10,24 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 
-
-class SelectMontantFragment : Fragment() {
-    private lateinit var binding: FragmentSelectMontantBinding
+class HistoryTransactionsFragment : Fragment() {
+    private lateinit var binding : FragmentHistoryTransactionsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_select_montant, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history_transactions,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        goToOtpFragment()
+        goBackToHome()
     }
 
-    private fun goToOtpFragment() {
-        binding.btnDone.setOnClickListener {
-            findNavController().navigate(R.id.action_selectMontantFragment_to_enterOtpFragment)
+    private fun goBackToHome() {
+        binding.goBackToProfileButton.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 

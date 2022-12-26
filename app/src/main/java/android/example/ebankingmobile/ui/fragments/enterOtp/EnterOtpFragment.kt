@@ -1,7 +1,7 @@
-package android.example.ebankingmobile.ui.fragments
+package android.example.ebankingmobile.ui.fragments.enterOtp
 
 import android.example.ebankingmobile.R
-import android.example.ebankingmobile.databinding.FragmentSelectBeneficiaireBinding
+import android.example.ebankingmobile.databinding.FragmentEnterOtpBinding
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,28 +10,26 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 
-class SelectBeneficiaire : Fragment() {
-    private lateinit var binding : FragmentSelectBeneficiaireBinding
+
+class EnterOtpFragment : Fragment() {
+    private lateinit var binding : FragmentEnterOtpBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater , R.layout.fragment_select_beneficiaire,container,false)
+    ): View {
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_enter_otp,container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        goToSelectMontantFragment()
+        goToFinalisation()
     }
 
-    private fun goToSelectMontantFragment() {
+    private fun goToFinalisation() {
         binding.btnDone.setOnClickListener {
-            findNavController().navigate(R.id.action_selectBeneficiaire_to_selectMontantFragment)
+            findNavController().navigate(R.id.action_enterOtpFragment_to_finaliserTransactionFragment)
         }
     }
-
-
-
 
 }

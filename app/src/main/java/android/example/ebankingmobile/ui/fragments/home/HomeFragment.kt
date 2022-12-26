@@ -1,4 +1,4 @@
-package android.example.ebankingmobile.ui.fragments
+package android.example.ebankingmobile.ui.fragments.home
 
 import android.example.ebankingmobile.R
 import android.example.ebankingmobile.databinding.FragmentHomeBinding

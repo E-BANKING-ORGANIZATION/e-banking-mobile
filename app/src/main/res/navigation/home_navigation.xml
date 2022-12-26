@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="android.example.ebankingmobile.ui.fragments.HomeFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.home.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_selectBeneficiaire"
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/selectBeneficiaire"
-        android:name="android.example.ebankingmobile.ui.fragments.SelectBeneficiaire"
+        android:name="android.example.ebankingmobile.ui.fragments.beneficiare.SelectBeneficiaire"
         android:label="SelectBeneficiaire" >
         <action
             android:id="@+id/action_selectBeneficiaire_to_selectMontantFragment"
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/selectMontantFragment"
-        android:name="android.example.ebankingmobile.ui.fragments.SelectMontantFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.selectMontant.SelectMontantFragment"
         android:label="SelectMontantFragment" >
         <action
             android:id="@+id/action_selectMontantFragment_to_enterOtpFragment"
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/enterOtpFragment"
-        android:name="android.example.ebankingmobile.ui.fragments.EnterOtpFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.enterOtp.EnterOtpFragment"
         android:label="EnterOtpFragment" >
         <action
             android:id="@+id/action_enterOtpFragment_to_finaliserTransactionFragment"
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/finaliserTransactionFragment"
-        android:name="android.example.ebankingmobile.ui.fragments.FinaliserTransactionFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.finaliserTransaction.FinaliserTransactionFragment"
         android:label="FinaliserTransactionFragment" >
         <action
             android:id="@+id/action_finaliserTransactionFragment_to_homeFragment"
@@ -50,6 +50,6 @@
     </fragment>
     <fragment
         android:id="@+id/historyTransactionsFragment"
-        android:name="android.example.ebankingmobile.ui.fragments.HistoryTransactionsFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.historyTransactions.HistoryTransactionsFragment"
         android:label="HistoryTransactionsFragment" />
 </navigation>
