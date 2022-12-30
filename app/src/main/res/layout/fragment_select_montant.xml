@@ -90,7 +90,7 @@
             android:id="@+id/gradeInput"
             style="@style/oneInputFormSignUp"
             android:background="@drawable/search_input_home_page"
-            android:entries="@array/gradeStrings"
+            android:entries="@array/transferFees"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"

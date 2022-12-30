@@ -96,6 +96,10 @@
     <string name="_5000_dh">5000 DH</string>
     <string name="updated_at">Updated At</string>
     <string name="_12_12_2022">12/12/2022</string>
+    <string name="nom_beneficiare">Nom Beneficiare</string>
+    <string name="pr_nom_beneficiaire">Prénom Beneficiaire</string>
+    <string name="gsm">GSM</string>
+    <string name="save_beneficiaire">Save Beneficiaire</string>
 
     <string-array name="gradeStrings">
         <item>Select Your Grade</item>
@@ -117,6 +121,16 @@
         <item>French</item>
         <item>English</item>
         <item>Spanish</item>
+    </string-array>
+
+    <string-array name="listeBeneficiares">
+        <item>Select Your Beneficaire</item>
+    </string-array>
+
+    <string-array name="transferFees">
+        <item>Select Your Transfer Fee</item>
+        <item>First Haha</item>
+        <item>Second Haha</item>
     </string-array>
 
 </resources>
