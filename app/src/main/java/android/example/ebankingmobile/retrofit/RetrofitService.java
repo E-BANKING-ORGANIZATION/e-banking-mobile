@@ -10,6 +10,7 @@ public class RetrofitService {
     private static final String URL = "http://192.168.100.164";
     private static final String TWO_POINTS = ":";
     private static final String PORT = "8083";
+    private static final String URI = "https://curious-unicorn-ea3t6y-dev-ed.trailblaze.my.salesforce.com/services/apexrest/Beneficiaire/?AccId=a038d000006xKNuAAM";
 
     public RetrofitService() {
         initializeRetrofit();
@@ -18,7 +19,8 @@ public class RetrofitService {
     private void initializeRetrofit() {
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(URL + TWO_POINTS + PORT)
+                .baseUrl("https://login.salesforce.com")
+//                .baseUrl(URL + TWO_POINTS + PORT)
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .build();
     }

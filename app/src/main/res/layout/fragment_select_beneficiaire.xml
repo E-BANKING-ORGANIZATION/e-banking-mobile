@@ -19,7 +19,7 @@
             android:gravity="center"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:text="First Step"
+            android:text="@string/first_step"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,10 +53,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_select_beneficiaire"
-            app:srcCompat="@drawable/add" />
+            app:srcCompat="@drawable/add"
+            android:contentDescription="TODO" />
 
         <Spinner
-            android:id="@+id/gradeInput"
+            android:id="@+id/listBeneficiare"
             style="@style/oneInputFormSignUp"
             android:layout_marginTop="24dp"
             android:background="@drawable/search_input_home_page"
@@ -77,7 +78,7 @@
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gradeInput"
+            app:layout_constraintTop_toBottomOf="@+id/listBeneficiare"
             app:srcCompat="@drawable/check" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

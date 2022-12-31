@@ -100,6 +100,12 @@
     <string name="pr_nom_beneficiaire">Prénom Beneficiaire</string>
     <string name="gsm">GSM</string>
     <string name="save_beneficiaire">Save Beneficiaire</string>
+    <string name="your_final_amount_is">Your final amount is :</string>
+    <string name="first_step">First Step</string>
+    <string name="your_final_amount">Your final amount :</string>
+    <string name="notification_du_transfert">Notification du transfert</string>
+    <string name="entrez_votre_argent_ici">entrez votre argent ici !</string>
+    <string name="don_t_have_an_account">Don\'t have an account ?</string>
 
     <string-array name="gradeStrings">
         <item>Select Your Grade</item>
@@ -128,9 +134,10 @@
     </string-array>
 
     <string-array name="transferFees">
-        <item>Select Your Transfer Fee</item>
-        <item>First Haha</item>
-        <item>Second Haha</item>
+        <item>Selectionnez the frais charge svp !</item>
+        <item>Frais à la charge du client d’donneur d’ordre</item>
+        <item>Frais à la charge du client bénéficiaire</item>
+        <item>Frais partagés entre les clients (Donneur d’ordre et bénéficiaire)</item>
     </string-array>
 
 </resources>

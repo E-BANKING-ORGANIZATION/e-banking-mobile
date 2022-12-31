@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/home_navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -52,4 +52,12 @@
         android:id="@+id/historyTransactionsFragment"
         android:name="android.example.ebankingmobile.ui.fragments.historyTransactions.HistoryTransactionsFragment"
         android:label="HistoryTransactionsFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="android.example.ebankingmobile.ui.fragments.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

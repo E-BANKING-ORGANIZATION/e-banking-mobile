@@ -5,6 +5,8 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/whole_layout_container"
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBackground"
@@ -34,6 +36,7 @@
             android:padding="10dp"
             android:text="Séléctionnez votre montant"
             android:textAlignment="center"
+            android:textColor="#7B1FA2"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -46,17 +49,19 @@
             android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="100dp"
             android:adjustViewBounds="true"
             android:background="@drawable/roundcorner"
             android:elevation="100dp"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gradeInput"
+            app:layout_constraintTop_toBottomOf="@+id/list_fees_of_transfer"
             app:srcCompat="@drawable/check" />
+
         <EditText
-            android:id="@+id/nameInput"
+            android:id="@+id/montantInput"
+            android:imeOptions="actionDone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -64,8 +69,8 @@
             android:layout_marginTop="24dp"
             android:background="#EEE"
             android:ems="10"
-            android:hint="entrez votre argent ici !"
-            android:inputType="textPersonName"
+            android:hint="@string/entrez_votre_argent_ici"
+            android:inputType="number"
             android:padding="8dp"
             android:textAlignment="center"
             android:textColor="@color/label_grey"
@@ -76,25 +81,73 @@
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/notificationTransferCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
-            android:text="Notification du transfert"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            android:text="@string/notification_du_transfert"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameInput" />
+            app:layout_constraintTop_toBottomOf="@+id/montantInput" />
 
         <Spinner
-            android:id="@+id/gradeInput"
+            android:id="@+id/notifChoiceList"
             style="@style/oneInputFormSignUp"
             android:background="@drawable/search_input_home_page"
             android:entries="@array/transferFees"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+            app:layout_constraintTop_toBottomOf="@+id/notificationTransferCheckBox" />
+
+
+        <LinearLayout
+            android:id="@+id/layout_containing_final_amout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/notifChoiceList">
+
+            <Button
+                android:id="@+id/title_final_amount_after_fees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/label_grey"
+                android:padding="10dp"
+                android:text="@string/your_final_amount"
+
+                android:textAlignment="center"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/value_final_amount_after_fees"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:gravity="center"
+                android:text="5000DH"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list_fees_of_transfer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_containing_final_amout">
+
+        </ListView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
