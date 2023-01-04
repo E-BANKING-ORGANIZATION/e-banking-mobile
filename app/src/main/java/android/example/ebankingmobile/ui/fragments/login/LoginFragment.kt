@@ -2,9 +2,15 @@ package android.example.ebankingmobile.ui.fragments.login
 
 import android.example.ebankingmobile.R
 import android.example.ebankingmobile.databinding.FragmentLoginBinding
-import android.example.ebankingmobile.retrofit.ClientApi
-import android.example.ebankingmobile.retrofit.RetrofitService
-import android.example.ebankingmobile.retrofit.model.ResponseLogin
+import android.example.ebankingmobile.retrofit.api.AccessTokenApi
+import android.example.ebankingmobile.retrofit.api.UserInformationsApi
+import android.example.ebankingmobile.retrofit.model.LoginResponse
+import android.example.ebankingmobile.retrofit.model.User
+import android.example.ebankingmobile.retrofit.session.SessionManager
+import android.example.ebankingmobile.retrofit.ws.AccessTokenService
+import android.example.ebankingmobile.retrofit.ws.UserInformationService
+import android.example.ebankingmobile.utils.FrontUtils
+import android.example.ebankingmobile.utils.consts.Consts
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Response
@@ -24,6 +29,7 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private lateinit var userNameEditText: EditText
     private lateinit var passwordEditText: TextInputLayout
+    private lateinit var sessionManager: SessionManager
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +37,7 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         userNameEditText = binding.userNameInput
         passwordEditText = binding.passwordInput
+        sessionManager = SessionManager(requireContext())
         return binding.root
     }
 
@@ -45,25 +52,72 @@ class LoginFragment : Fragment() {
     }
 
     private fun goToHomePage() {
-        val retrofitService = RetrofitService()
-        val clientApi = retrofitService.retrofit.create(ClientApi::class.java)
+        val accessTokenService =
+            AccessTokenService()
+        val userInformationService = UserInformationService()
+        val accessTokenApi = accessTokenService.retrofit.create(AccessTokenApi::class.java)
+        val userInformationApi =
+            userInformationService.retrofit.create(UserInformationsApi::class.java)
+
         binding.goToHomeActivity.setOnClickListener {
+            val userNameText = userNameEditText.text.toString()
+            val passwordText = passwordEditText.editText?.text.toString()
+            if (!FrontUtils.checkInputsEmptyOrNot(userNameText, passwordText)) {
+                FrontUtils.showToast(requireContext(), "you have to check your inputs !")
+            } else {
+                accessTokenApi.accessToken.enqueue(
+                    object : Callback, retrofit2.Callback<LoginResponse> {
+                        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                            Log.i("error", call.toString())
+                        }
 
-            clientApi.loginUser().enqueue(
-                object : Callback, retrofit2.Callback<ResponseLogin> {
-                    override fun onFailure(call: Call<ResponseLogin>, t: Throwable) {
-                        Log.i("error", call.toString())
-                    }
-                    override fun onResponse(
-                        call: Call<ResponseLogin>,
-                        response: Response<ResponseLogin>
-                    ) {
-                        response.body()?.let { it1 -> Log.i("success", it1.access_token) }
-                    }
+                        override fun onResponse(
+                            call: Call<LoginResponse>,
+                            response: Response<LoginResponse>
+                        ) {
+                            val loginResponse = response.body()
 
-                }
-            )
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                            if (loginResponse != null) {
+                                if (loginResponse.access_token != null) {
+                                    sessionManager.saveAuthToken(loginResponse.access_token)
+                                } else {
+                                    // FrontUtils.showToast(requireContext(), "error of token !")
+                                }
+                            }
+                        }
+
+                    }
+                )
+
+                userInformationApi.getUserInformation(
+                    Consts.BEARER + sessionManager.fetchAuthToken(),
+                    userNameText,
+                    passwordText
+                )
+                    .enqueue(
+                        object : Callback, retrofit2.Callback<User> {
+                            override fun onFailure(call: Call<User>, t: Throwable) {
+                                print("hahahahaa")
+                                FrontUtils.showToast(requireContext(),"Error in the credentials ! Please try again !")
+                            }
+
+                            override fun onResponse(
+                                call: Call<User>,
+                                response: Response<User>
+                            ) {
+                                response.body()
+                                    ?.let { it1 ->
+                                        FrontUtils.showToast(
+                                            requireContext(),
+                                            it1.Name
+                                        )
+                                    }
+                            }
+
+                        }
+                    )
+                //findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            }
         }
     }
 
