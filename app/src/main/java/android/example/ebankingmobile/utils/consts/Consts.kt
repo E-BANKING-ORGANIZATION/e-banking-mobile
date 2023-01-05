@@ -3,6 +3,9 @@ package android.example.ebankingmobile.utils.consts
 class Consts {
     companion object {
 
+        const val NOTIFICATION_TRANSFER_FEES = "Transfer fee : "
+        const val CHARGE_FEES = "Frais de charge : "
+        const val AMOUNT = "Original Amount : "
         const val BENEFICIARE = "BENEFICIARE"
         const val TRANSACTION = "TRANSACTION"
         private const val AUTHORIZATION_HEADER = "AUTHORIZATION"

@@ -9,7 +9,6 @@
         android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
         android:fitsSystemWindows="true"
         tools:context=".ui.activities.MainActivity">
 
@@ -131,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:gravity="center"
-                android:text="5000DH"
+                android:text="0DH"
                 android:textSize="32sp"
                 android:textStyle="bold" />
         </LinearLayout>
