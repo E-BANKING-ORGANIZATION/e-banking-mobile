@@ -21,14 +21,14 @@
                 android:hint="@string/nom_beneficiare" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/form_textFieldBranch"
+                android:id="@+id/form_textFieldPrenom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:hint="@string/pr_nom_beneficiaire" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/form_textFieldLocation"
+                android:id="@+id/form_textFieldGSM"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"

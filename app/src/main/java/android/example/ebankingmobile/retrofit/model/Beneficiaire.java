@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Beneficiaire {
-    public String access_token;
-    public String instance_url;
-    public String id;
-    public String token_type;
-    private String issued_at;
-    private String signature;
+    public String Name;
+    public String Prenom;
+    public String Phone__c;
+    public String RelatedClient__c;
+    public String Id;
+    public String GSM;
 }

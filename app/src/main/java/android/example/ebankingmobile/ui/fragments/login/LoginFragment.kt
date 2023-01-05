@@ -19,6 +19,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Response
@@ -44,18 +46,23 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         goToHomePage()
-        signIn()
+        checkUserAlreadyLoggedIn()
     }
 
-    private fun signIn() {
-
+    private fun checkUserAlreadyLoggedIn() {
+        if (FrontUtils.checkUserLoggedIn(requireContext())) {
+            //Utils.startActivity(requireContext(), MainActivity::class.java)
+            requireView().findNavController()
+                .navigate(R.id.action_loginFragment_to_homeFragment)
+        }
     }
+
 
     private fun goToHomePage() {
         val accessTokenService =
             AccessTokenService()
-        val userInformationService = UserInformationService()
         val accessTokenApi = accessTokenService.retrofit.create(AccessTokenApi::class.java)
+        val userInformationService = UserInformationService()
         val userInformationApi =
             userInformationService.retrofit.create(UserInformationsApi::class.java)
 
@@ -88,7 +95,6 @@ class LoginFragment : Fragment() {
 
                     }
                 )
-
                 userInformationApi.getUserInformation(
                     Consts.BEARER + sessionManager.fetchAuthToken(),
                     userNameText,
@@ -97,26 +103,32 @@ class LoginFragment : Fragment() {
                     .enqueue(
                         object : Callback, retrofit2.Callback<User> {
                             override fun onFailure(call: Call<User>, t: Throwable) {
-                                print("hahahahaa")
-                                FrontUtils.showToast(requireContext(),"Error in the credentials ! Please try again !")
+                                FrontUtils.showToast(
+                                    requireContext(),
+                                    "Error in the server !"
+                                )
                             }
 
                             override fun onResponse(
                                 call: Call<User>,
                                 response: Response<User>
                             ) {
-                                response.body()
-                                    ?.let { it1 ->
-                                        FrontUtils.showToast(
-                                            requireContext(),
-                                            it1.Name
-                                        )
+                                if (response.code() >= 400) {
+                                    FrontUtils.showToast(
+                                        requireContext(),
+                                        "Error in the credentials ! Please try again !"
+                                    )
+                                } else {
+                                    val responseBody = response.body()
+                                    if (responseBody != null) {
+                                        //sessionManager.saveUsername(userNameText)
+                                        sessionManager.saveId(responseBody.Id)
+                                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                                     }
+                                }
                             }
-
                         }
                     )
-                //findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
             }
         }
     }

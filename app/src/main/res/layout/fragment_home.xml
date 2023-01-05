@@ -54,11 +54,10 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textAbout"
+                        android:id="@+id/userName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/yessine_jaoua"
                         android:textColor="#A1887F"
                         android:textSize="15sp"
                         android:textStyle="bold"
@@ -78,7 +77,7 @@
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/numberFiles"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textAbout" />
+                        app:layout_constraintTop_toBottomOf="@id/userName" />
 
                     <TextView
                         android:id="@+id/numberFiles"
@@ -92,11 +91,11 @@
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/numberModules"
-                        app:layout_constraintTop_toBottomOf="@id/textAbout" />
+                        app:layout_constraintTop_toBottomOf="@id/userName" />
 
 
                     <TextView
-                        android:id="@+id/textPostsLabel"
+                        android:id="@+id/amountLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
