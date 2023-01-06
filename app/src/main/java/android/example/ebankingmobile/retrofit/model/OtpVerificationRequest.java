@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class User {
-    public String Id;
-    public String Name;
-    public String Amount__c;
-    public String Phone__c;
+public class OtpVerificationRequest {
+    public String api_key;
+    public String api_secret;
+    public String request_id;
+    public String code;
 }

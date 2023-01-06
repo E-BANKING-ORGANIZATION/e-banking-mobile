@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class User {
-    public String Id;
-    public String Name;
-    public String Amount__c;
-    public String Phone__c;
+public class OtpResponse {
+    public String request_id;
+    public String status;
 }

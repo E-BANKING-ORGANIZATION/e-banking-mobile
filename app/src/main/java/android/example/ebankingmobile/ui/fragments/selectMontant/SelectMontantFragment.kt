@@ -4,9 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.example.ebankingmobile.R
 import android.example.ebankingmobile.databinding.FragmentSelectMontantBinding
+import android.example.ebankingmobile.retrofit.api.OtpApi
+import android.example.ebankingmobile.retrofit.model.OtpRequest
+import android.example.ebankingmobile.retrofit.model.OtpResponse
+import android.example.ebankingmobile.retrofit.session.SessionManager
 import android.example.ebankingmobile.utils.FrontUtils
 import android.example.ebankingmobile.utils.TransactionUtils
 import android.example.ebankingmobile.utils.consts.Consts
+import android.example.ebankingmobile.utils.consts.ModalMessages
 import android.example.ebankingmobile.utils.consts.NotificationNames
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +25,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
 
 
 class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -35,6 +43,7 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var currentSpinnerItem: String = ""
     private lateinit var listFeesDisplayed: HashMap<String, Long>
     private lateinit var finalAmount: TextView
+    private lateinit var sessionManager: SessionManager
 
 
     override fun onCreateView(
@@ -70,6 +79,8 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
         montantInput = binding.montantInput
         constraintLayout = binding.wholeLayoutContainer
         spinner = binding.notifChoiceList
+
+        sessionManager = SessionManager(requireContext())
 
         finalAmount = binding.valueFinalAmountAfterFees
 
@@ -163,7 +174,7 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun displayNewAmountWithFees() {
         var newAmount: Long = 0
         for (item in listFeesDisplayed) {
-            Log.i("hahaha",item.value.toString())
+            Log.i("hahaha", item.value.toString())
         }
         Log.i("final amout of values ", newAmount.toString())
         finalAmount.text = newAmount.toString()
@@ -171,7 +182,41 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun goToOtpFragment() {
         binding.btnDone.setOnClickListener {
-            findNavController().navigate(R.id.action_selectMontantFragment_to_enterOtpFragment)
+            if (montantInput.text.toString() != "") {
+                val otpService =
+                    android.example.ebankingmobile.retrofit.ws.OtpService()
+                val sendOtp = otpService.retrofit.create(OtpApi::class.java)
+                val otpRequest = OtpRequest(
+                    Consts.API_KEY,
+                    Consts.API_SECRET,
+                    sessionManager.fetchPhone(),
+                    Consts.BRAND
+                )
+//
+//                otpRequest.api_key = Consts.API_KEY
+//                otpRequest.api_secret = Consts.API_SECRET
+//                otpRequest.number = sessionManager.fetchPhone()
+//                otpRequest.brand = Consts.BRAND
+
+                sendOtp.sendOtpToUser(otpRequest).enqueue(
+                    object : Callback, retrofit2.Callback<OtpResponse> {
+                        override fun onResponse(
+                            call: Call<OtpResponse>,
+                            response: Response<OtpResponse>
+                        ) {
+                            println("this is the response $response")
+                            sessionManager.saveRequestIdForTemporaryOtp(response.body()!!.request_id)
+                        }
+
+                        override fun onFailure(call: Call<OtpResponse>, t: Throwable) {
+                        }
+
+                    }
+                )
+                findNavController().navigate(R.id.action_selectMontantFragment_to_enterOtpFragment)
+            } else {
+                FrontUtils.showToast(requireContext(), ModalMessages.ERROR_FIELD_AMOUNT_EMPTY)
+            }
         }
     }
 

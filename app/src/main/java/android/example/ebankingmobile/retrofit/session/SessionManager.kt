@@ -14,6 +14,8 @@ class SessionManager(context: Context) {
         const val USER_PASSWORD = "user_password"
         const val USER_EMAIL = "user_email"
         const val USER_ID = "user_id"
+        const val USER_PHONE = "user_phone"
+        const val REQUEST_ID_TEMP_TOKEN = "request_id_temp_token"
     }
 
     /**
@@ -61,6 +63,21 @@ class SessionManager(context: Context) {
         editor.apply()
     }
 
+    fun saveRequestIdForTemporaryOtp(token: String) {
+        val editor = prefs.edit()
+        editor.putString(REQUEST_ID_TEMP_TOKEN, token)
+        editor.apply()
+    }
+
+    /**
+     * Function to save auth token
+     */
+    fun savePhone(token: String) {
+        val editor = prefs.edit()
+        editor.putString(USER_PHONE, token)
+        editor.apply()
+    }
+
     /**
      * Function to fetch auth token
      */
@@ -95,4 +112,19 @@ class SessionManager(context: Context) {
     fun fetchEmail(): String? {
         return prefs.getString(USER_EMAIL, null)
     }
+
+    /**
+     * Function to fetch phone number
+     */
+    fun fetchPhone(): String? {
+        return prefs.getString(USER_PHONE, null)
+    }
+
+    /**
+     * Function to fetch phone number
+     */
+    fun fetchRequestId(): String? {
+        return prefs.getString(REQUEST_ID_TEMP_TOKEN, null)
+    }
+
 }

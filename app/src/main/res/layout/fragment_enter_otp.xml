@@ -65,7 +65,7 @@
             android:layout_marginTop="24dp"
             android:background="#EEE"
             android:ems="10"
-            android:hint="entrez votre argent ici !"
+            android:hint="Entrez votre otp ici !"
             android:inputType="textPersonName"
             android:padding="8dp"
             android:textAlignment="center"

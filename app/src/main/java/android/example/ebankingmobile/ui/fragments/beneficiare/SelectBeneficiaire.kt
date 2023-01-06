@@ -9,7 +9,6 @@ import android.example.ebankingmobile.retrofit.ws.BeneficiaireService
 import android.example.ebankingmobile.utils.FrontUtils
 import android.example.ebankingmobile.utils.consts.Consts
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,7 @@ class SelectBeneficiaire : Fragment(), AdapterView.OnItemSelectedListener {
         sessionManager = SessionManager(requireContext())
         spinner = binding.listBeneficiare
         listBeneficiare = arrayListOf()
-        getListBeneficiare()
+        //getListBeneficiare()
         // listBeneficiare = listOf("JAOUA", "YESSINE", "ZIKO")
         //configurationSpinnerWithBeneficiaresInOurDatabase()
         return binding.root
@@ -81,10 +80,15 @@ class SelectBeneficiaire : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     private fun showDialogAddBeneficiare() {
         AddBeneficiareDialogFragment().show(
             childFragmentManager, AddBeneficiareDialogFragment.TAG
         )
+        getListBeneficiare()
     }
 
 

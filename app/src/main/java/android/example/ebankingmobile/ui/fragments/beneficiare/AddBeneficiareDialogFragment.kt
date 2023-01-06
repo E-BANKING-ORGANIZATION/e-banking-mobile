@@ -1,5 +1,6 @@
 package android.example.ebankingmobile.ui.fragments.beneficiare
 
+import android.annotation.SuppressLint
 import android.example.ebankingmobile.R
 import android.example.ebankingmobile.databinding.FragmentAddBeneficiareBinding
 import android.example.ebankingmobile.retrofit.api.BeneficiareApi
@@ -7,7 +8,9 @@ import android.example.ebankingmobile.retrofit.model.Beneficiaire
 import android.example.ebankingmobile.retrofit.model.PostBeneficiareResponse
 import android.example.ebankingmobile.retrofit.session.SessionManager
 import android.example.ebankingmobile.retrofit.ws.BeneficiaireService
+import android.example.ebankingmobile.utils.FrontUtils
 import android.example.ebankingmobile.utils.consts.Consts
+import android.example.ebankingmobile.utils.consts.ModalMessages
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +30,7 @@ class AddBeneficiareDialogFragment : DialogFragment() {
     private lateinit var telephoneBeneficiare: TextInputEditText
     private lateinit var sessionManager: SessionManager
 
+    @SuppressLint("UseGetLayoutInflater")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,45 +52,60 @@ class AddBeneficiareDialogFragment : DialogFragment() {
         val beneficiaireApi =
             beneficiareService.retrofit.create(BeneficiareApi::class.java)
 
+        bindingAddBeneficiarePopUpModal.closeDialogButton.setOnClickListener {
+            dismiss()
+        }
+
         bindingAddBeneficiarePopUpModal.formButtonSave.setOnClickListener {
 
             val beneficiaire = Beneficiaire()
 
-            beneficiaire.Name = nomBeneficiare.text.toString()
-            //beneficiaire.Prenom = prenomBeneficiare.text.toString()
-            beneficiaire.Phone__c = telephoneBeneficiare.text.toString()
-            beneficiaire.RelatedClient__c = sessionManager.fetchId()
+            if (!FrontUtils.checkInputsEmptyOrNot(
+                    nomBeneficiare.text.toString(),
+                    telephoneBeneficiare.text.toString(),
+                    prenomBeneficiare.text.toString()
+                )
+            ) {
+                FrontUtils.showToast(requireContext(), ModalMessages.ERROR_FIELD_AMOUNT_EMPTY)
+            } else {
 
-            beneficiaireApi.postBeneficiare(
-                Consts.BEARER + sessionManager.fetchAuthToken(),
-                beneficiaire
-            ).enqueue(
-                object : Callback, retrofit2.Callback<PostBeneficiareResponse> {
-                    override fun onFailure(call: Call<PostBeneficiareResponse>, t: Throwable) {
-                        Log.i("error in the server !", "server")
-                    }
 
-                    override fun onResponse(
-                        call: Call<PostBeneficiareResponse>,
-                        response: Response<PostBeneficiareResponse>
-                    ) {
-                        if (response.code() >= 400) {
+                beneficiaire.Name = nomBeneficiare.text.toString()
+                //beneficiaire.Prenom = prenomBeneficiare.text.toString()
+                beneficiaire.Phone__c = telephoneBeneficiare.text.toString()
+                beneficiaire.RelatedClient__c = sessionManager.fetchId()
+
+                beneficiaireApi.postBeneficiare(
+                    Consts.BEARER + sessionManager.fetchAuthToken(),
+                    beneficiaire
+                ).enqueue(
+                    object : Callback, retrofit2.Callback<PostBeneficiareResponse> {
+                        override fun onFailure(call: Call<PostBeneficiareResponse>, t: Throwable) {
                             Log.i("error in the server !", "server")
+                        }
+
+                        override fun onResponse(
+                            call: Call<PostBeneficiareResponse>,
+                            response: Response<PostBeneficiareResponse>
+                        ) {
+                            if (response.code() >= 400) {
+                                Log.i("error in the server !", "server")
 //                            FrontUtils.showToast(
 //                                requireContext(),
 //                                "Error in the credentials ! Please try again !"
 //                            )
-                        } else {
-                            Log.i("hahahaha", "with success !")
+                            } else {
+                                Log.i("hahahaha", "with success !")
 //                            FrontUtils.showToast(
 //                                requireContext(),
 //                                "you have just enter the beneficiare !"
 //                            )
+                            }
                         }
                     }
-                }
-            )
-            this.dismiss()
+                )
+                this.dismiss()
+            }
         }
         // dialog logic !
     }

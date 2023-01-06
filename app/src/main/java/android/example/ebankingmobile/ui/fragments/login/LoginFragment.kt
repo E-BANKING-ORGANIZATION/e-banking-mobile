@@ -123,6 +123,7 @@ class LoginFragment : Fragment() {
                                     if (responseBody != null) {
                                         //sessionManager.saveUsername(userNameText)
                                         sessionManager.saveId(responseBody.Id)
+                                        sessionManager.savePhone(responseBody.Phone__c)
                                         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                                     }
                                 }
