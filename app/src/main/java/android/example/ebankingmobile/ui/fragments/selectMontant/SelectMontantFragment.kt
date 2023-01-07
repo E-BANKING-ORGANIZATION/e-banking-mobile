@@ -5,14 +5,17 @@ import android.content.Context
 import android.example.ebankingmobile.R
 import android.example.ebankingmobile.databinding.FragmentSelectMontantBinding
 import android.example.ebankingmobile.retrofit.api.OtpApi
+import android.example.ebankingmobile.retrofit.api.TransactionApi
 import android.example.ebankingmobile.retrofit.model.OtpRequest
-import android.example.ebankingmobile.retrofit.model.OtpResponse
+import android.example.ebankingmobile.retrofit.model.TransactionRequest
 import android.example.ebankingmobile.retrofit.session.SessionManager
+import android.example.ebankingmobile.retrofit.ws.BeneficiaireService
+import android.example.ebankingmobile.retrofit.ws.OtpService
+import android.example.ebankingmobile.utils.Errors
 import android.example.ebankingmobile.utils.FrontUtils
 import android.example.ebankingmobile.utils.TransactionUtils
 import android.example.ebankingmobile.utils.consts.Consts
 import android.example.ebankingmobile.utils.consts.ModalMessages
-import android.example.ebankingmobile.utils.consts.NotificationNames
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,7 +36,7 @@ import javax.security.auth.callback.Callback
 class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentSelectMontantBinding
     private lateinit var arrayAdapter: ArrayAdapter<String>
-    private lateinit var listStrings: ArrayList<String>
+    private lateinit var listLinesDisplayed: ArrayList<String>
     private lateinit var listView: ListView
     private lateinit var checkBox: CheckBox
     private lateinit var montantInput: EditText
@@ -41,7 +44,7 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var spinner: Spinner
     private lateinit var listNotifications: List<String>
     private var currentSpinnerItem: String = ""
-    private lateinit var listFeesDisplayed: HashMap<String, Long>
+    private lateinit var listFeesDisplayed: HashMap<String, Double>
     private lateinit var finalAmount: TextView
     private lateinit var sessionManager: SessionManager
 
@@ -54,26 +57,26 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_select_montant, container, false)
         listFeesDisplayed = HashMap(3)
 
-        listFeesDisplayed[Consts.AMOUNT] = 0
-        listFeesDisplayed[Consts.NOTIFICATION_TRANSFER_FEES] = 0
-        listFeesDisplayed[Consts.CHARGE_FEES] = 0
+        listFeesDisplayed[Consts.AMOUNT] = 0.0
+        listFeesDisplayed[Consts.NOTIFICATION_TRANSFER_FEES] = 0.0
+        listFeesDisplayed[Consts.CHARGE_FEES] = 0.0
 
-        listStrings = java.util.ArrayList()
+        listLinesDisplayed = java.util.ArrayList()
 
-        listStrings.add(Consts.AMOUNT + listFeesDisplayed[Consts.AMOUNT])
-        listStrings.add(Consts.NOTIFICATION_TRANSFER_FEES + listFeesDisplayed[Consts.NOTIFICATION_TRANSFER_FEES])
-        listStrings.add(Consts.CHARGE_FEES + listFeesDisplayed[Consts.CHARGE_FEES])
+        listLinesDisplayed.add(Consts.AMOUNT + listFeesDisplayed[Consts.AMOUNT])
+        listLinesDisplayed.add(Consts.NOTIFICATION_TRANSFER_FEES + listFeesDisplayed[Consts.NOTIFICATION_TRANSFER_FEES])
+        listLinesDisplayed.add(Consts.CHARGE_FEES + listFeesDisplayed[Consts.CHARGE_FEES])
 
         listView = binding.listFeesOfTransfer
         arrayAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listStrings)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listLinesDisplayed)
         listView.adapter = arrayAdapter
         checkBox = binding.notificationTransferCheckBox
 
         listNotifications = listOf(
-            NotificationNames.NOTHING,
-            NotificationNames.FIRST_NOTIFICATION_CHOICE,
-            NotificationNames.SECOND_NOTIFICATION_CHOICE
+            Consts.FIRST_NOTIFICATION_CHOICE,
+            Consts.SECOND_NOTIFICATION_CHOICE,
+            Consts.THIRD_NOTIFICATION_CHOICE
         )
 
         montantInput = binding.montantInput
@@ -107,6 +110,39 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         spinner.onItemSelectedListener = this
+    }
+
+    private fun doTransaction() {
+        val beneficiareService = BeneficiaireService()
+        val transactionApi =
+            beneficiareService.retrofit.create(TransactionApi::class.java)
+
+        val transactionRequest = TransactionRequest()
+        transactionRequest.bl = checkBox.isChecked
+        transactionRequest.amount = montantInput.text.toString().toInt()
+        transactionRequest.id = sessionManager.fetchId()
+        transactionRequest.BenefId = "a048d000008IwrQAAS"
+
+        transactionApi.doTransaction(
+            Consts.BEARER + sessionManager.fetchAuthToken(),
+            TransactionRequest()
+        ).enqueue(
+            object : Callback, retrofit2.Callback<Void> {
+
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.code() >= 400) {
+                        Log.i("error in the", "please try again !")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.i("server", "that was error in the server !")
+                }
+
+            }
+        )
+
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -143,15 +179,42 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
             } else {
                 if (montantInput.text.toString() != "") {
                     updateNotificationAdapterItem(0, montantInput.text.toString().toLong())
+                    updateNotificationAdapterItem(2, montantInput.text.toString().toLong())
                 }
             }
         }
     }
 
     private fun updateNotificationAdapterItem(index: Int, amount: Long) {
-        val newString = TransactionUtils.returnFinalLineInListTransactionFees(amount, index)
-        listStrings[index] = newString
+        var newAmountAfterChargeFees = 0.0
+        var newString = ""
+        if (index == 2) {
+            newAmountAfterChargeFees =
+                TransactionUtils.returnChargeFees(amount, currentSpinnerItem)!!
+            newString =
+                TransactionUtils.returnFinalLineInListTransactionFees(
+                    newAmountAfterChargeFees,
+                    index
+                )
+            listFeesDisplayed[Consts.CHARGE_FEES] = newAmountAfterChargeFees
+        } else {
+            newString =
+                TransactionUtils.returnFinalLineInListTransactionFees(
+                    amount.toDouble(),
+                    index
+                )
+            if (index == 0) {
+                listFeesDisplayed[Consts.AMOUNT] = amount.toDouble()
+            } else {
+
+                listFeesDisplayed[Consts.NOTIFICATION_TRANSFER_FEES] = amount.toDouble()
+            }
+
+        }
+
+        listLinesDisplayed[index] = newString
         arrayAdapter.notifyDataSetChanged()
+
         displayNewAmountWithFees()
     }
 
@@ -162,7 +225,7 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     checkBox.isChecked = false
                     FrontUtils.showToast(requireContext(), "please type an amount before")
                 } else {
-                    updateNotificationAdapterItem(1, 5000)
+                    updateNotificationAdapterItem(1, Consts.TRANSFER_NOTIFICATION_FEES.toLong())
                 }
             } else if (!checkBox.isChecked) {
                 updateNotificationAdapterItem(1, 0)
@@ -171,20 +234,21 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
 
-    private fun displayNewAmountWithFees() {
-        var newAmount: Long = 0
+    private fun displayNewAmountWithFees(): Double {
+        var newAmount = 0.0
         for (item in listFeesDisplayed) {
-            Log.i("hahaha", item.value.toString())
+            newAmount += item.value
         }
         Log.i("final amout of values ", newAmount.toString())
         finalAmount.text = newAmount.toString()
+        return newAmount
     }
 
     private fun goToOtpFragment() {
         binding.btnDone.setOnClickListener {
             if (montantInput.text.toString() != "") {
                 val otpService =
-                    android.example.ebankingmobile.retrofit.ws.OtpService()
+                    OtpService()
                 val sendOtp = otpService.retrofit.create(OtpApi::class.java)
                 val otpRequest = OtpRequest(
                     Consts.API_KEY,
@@ -192,28 +256,28 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     sessionManager.fetchPhone(),
                     Consts.BRAND
                 )
+                if (finalAmount.text.toString().toDouble() > sessionManager.fetchAmount()!!.toDouble()) {
+                    FrontUtils.showToast(requireContext(),Errors.AMOUNT_NOT_ENOUGH)
+                } else {
+                    doTransaction()
+                    findNavController().navigate(R.id.action_selectMontantFragment_to_enterOtpFragment)
+                }
+
+//                sendOtp.sendOtpToUser(otpRequest).enqueue(
+//                    object : Callback, retrofit2.Callback<OtpResponse> {
+//                        override fun onResponse(
+//                            call: Call<OtpResponse>,
+//                            response: Response<OtpResponse>
+//                        ) {
+//                            println("this is the response $response")
+//                            //sessionManager.saveRequestIdForTemporaryOtp(response.body()!!.request_id)
+//                        }
 //
-//                otpRequest.api_key = Consts.API_KEY
-//                otpRequest.api_secret = Consts.API_SECRET
-//                otpRequest.number = sessionManager.fetchPhone()
-//                otpRequest.brand = Consts.BRAND
-
-                sendOtp.sendOtpToUser(otpRequest).enqueue(
-                    object : Callback, retrofit2.Callback<OtpResponse> {
-                        override fun onResponse(
-                            call: Call<OtpResponse>,
-                            response: Response<OtpResponse>
-                        ) {
-                            println("this is the response $response")
-                            sessionManager.saveRequestIdForTemporaryOtp(response.body()!!.request_id)
-                        }
-
-                        override fun onFailure(call: Call<OtpResponse>, t: Throwable) {
-                        }
-
-                    }
-                )
-                findNavController().navigate(R.id.action_selectMontantFragment_to_enterOtpFragment)
+//                        override fun onFailure(call: Call<OtpResponse>, t: Throwable) {
+//                        }
+//
+//                    }
+//                )
             } else {
                 FrontUtils.showToast(requireContext(), ModalMessages.ERROR_FIELD_AMOUNT_EMPTY)
             }
@@ -227,5 +291,6 @@ class SelectMontantFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(p0: AdapterView<*>?) {
 
     }
+
 
 }

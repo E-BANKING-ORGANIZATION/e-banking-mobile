@@ -15,6 +15,7 @@ class SessionManager(context: Context) {
         const val USER_EMAIL = "user_email"
         const val USER_ID = "user_id"
         const val USER_PHONE = "user_phone"
+        const val USER_AMOUNT = "user_amount"
         const val REQUEST_ID_TEMP_TOKEN = "request_id_temp_token"
     }
 
@@ -26,6 +27,17 @@ class SessionManager(context: Context) {
         editor.putString(USER_TOKEN, token)
         editor.apply()
     }
+
+    /**
+     * Function to save auth token
+     */
+    fun saveAmount(token: String) {
+        val editor = prefs.edit()
+        editor.putString(USER_AMOUNT, token)
+        editor.apply()
+    }
+
+
 
     /**
      * Function to save auth token
@@ -125,6 +137,13 @@ class SessionManager(context: Context) {
      */
     fun fetchRequestId(): String? {
         return prefs.getString(REQUEST_ID_TEMP_TOKEN, null)
+    }
+
+    /**
+     * Function to fetch phone number
+     */
+    fun fetchAmount(): String? {
+        return prefs.getString(USER_AMOUNT, null)
     }
 
 }

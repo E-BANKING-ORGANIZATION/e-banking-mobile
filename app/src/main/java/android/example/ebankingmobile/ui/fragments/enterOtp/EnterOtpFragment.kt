@@ -94,24 +94,11 @@ class EnterOtpFragment : Fragment() {
                             //performing negative action
                             builder.setNegativeButton("Cancel") { _, _ ->
 
-                                //performing positive action
-                                builder.setPositiveButton("Resend OTP") { _, _ ->
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "OTP is resent !",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-
                             }
 
                             //performing positive action
-                            builder.setPositiveButton("Resend OTP") { _, _ ->
-                                Toast.makeText(
-                                    requireContext(),
-                                    "OTP is resent !",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                            builder.setPositiveButton("Try again !") { _, _ ->
+
                             }
 
                             // Create the AlertDialog

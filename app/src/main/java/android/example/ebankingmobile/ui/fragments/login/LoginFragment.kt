@@ -124,6 +124,7 @@ class LoginFragment : Fragment() {
                                         //sessionManager.saveUsername(userNameText)
                                         sessionManager.saveId(responseBody.Id)
                                         sessionManager.savePhone(responseBody.Phone__c)
+                                        sessionManager.saveAmount(responseBody.Amount__c)
                                         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                                     }
                                 }

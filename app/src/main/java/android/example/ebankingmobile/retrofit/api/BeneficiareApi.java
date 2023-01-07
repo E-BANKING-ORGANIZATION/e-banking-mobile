@@ -24,4 +24,6 @@ public interface BeneficiareApi {
     Call<List<Beneficiaire>> getListBeneficiaires(
             @Header("Authorization") String authorization,
             @Query("AccId") String accId);
+
+
 }

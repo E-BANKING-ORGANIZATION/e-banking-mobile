@@ -3,12 +3,15 @@ package android.example.ebankingmobile.ui.fragments.beneficiare
 import android.example.ebankingmobile.R
 import android.example.ebankingmobile.databinding.FragmentSelectBeneficiaireBinding
 import android.example.ebankingmobile.retrofit.api.BeneficiareApi
+import android.example.ebankingmobile.retrofit.api.TransactionApi
 import android.example.ebankingmobile.retrofit.model.Beneficiaire
+import android.example.ebankingmobile.retrofit.model.TransactionRequest
 import android.example.ebankingmobile.retrofit.session.SessionManager
 import android.example.ebankingmobile.retrofit.ws.BeneficiaireService
 import android.example.ebankingmobile.utils.FrontUtils
 import android.example.ebankingmobile.utils.consts.Consts
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +53,7 @@ class SelectBeneficiaire : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         goToSelectMontantFragment()
+        getListBeneficiare()
         popUpModal()
     }
 
@@ -73,6 +77,8 @@ class SelectBeneficiaire : Fragment(), AdapterView.OnItemSelectedListener {
 
     }
 
+
+
     private fun popUpModal() {
         val fab: View = binding.btnAdd
         fab.setOnClickListener {
@@ -80,15 +86,10 @@ class SelectBeneficiaire : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     private fun showDialogAddBeneficiare() {
         AddBeneficiareDialogFragment().show(
             childFragmentManager, AddBeneficiareDialogFragment.TAG
         )
-        getListBeneficiare()
     }
 
 
